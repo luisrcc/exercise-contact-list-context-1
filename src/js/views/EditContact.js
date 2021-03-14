@@ -1,20 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import PropTypes from "prop-types";
 
-export const AddContact = () => {
-	const [AddingContact, setAddingContact] = useState({
+export const Editcontact = ({ match }) => {
+	const id = match.params.id.split(":")[1];
+	const [contactEditing, setContactEditing] = useState({
 		full_name: " ",
 		email: " ",
-		agenda_slug: "LC_agenda",
+		agenda_slug: "LC_Agenda",
 		address: " ",
 		phone: " "
 	});
 
-	const { full_name, email, agenda_slug, address, phone } = AddingContact;
+	const { full_name, email, agenda_slug, address, phone } = contactEditing;
+
+	//GET para traer la info del contacto por ID
+	const getContactID = async task => {
+		try {
+			const response = await fetch(`https://assets.breatheco.de/apis/fake/contact/${id}`);
+			const data = await response.json();
+			setContactEditing(data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	useEffect(() => {
+		getContactID();
+	}, []);
+
+	//realizar PUT para editar contacto
 
 	const handleInputChange = ({ target }) => {
-		setAddingContact({
-			...AddingContact,
+		setContactEditing({
+			...contactEditing,
 			[target.name]: target.value
 		});
 	};
@@ -23,15 +41,15 @@ export const AddContact = () => {
 		e.preventDefault();
 
 		const params = {
-			method: "POST",
+			method: "PUT",
 			headers: {
 				"Content-Type": "application/json"
 			},
-			body: JSON.stringify(AddingContact)
+			body: JSON.stringify(contactEditing)
 		};
-		const response = await fetch("https://assets.breatheco.de/apis/fake/contact/", params);
+		const response = await fetch(`https://assets.breatheco.de/apis/fake/contact/${id}`, params);
 		const data = await response.json();
-		setAddingContact({
+		setContactEditing({
 			full_name: " ",
 			email: " ",
 			agenda_slug: "LC_Agenda",
@@ -43,7 +61,7 @@ export const AddContact = () => {
 	return (
 		<div className="container">
 			<div>
-				<h1 className="text-center mt-5">Add a new contact</h1>
+				<h1 className="text-center mt-5">Editar Contacto</h1>
 				<form>
 					<div className="form-group">
 						<label>Full Name</label>
@@ -52,7 +70,7 @@ export const AddContact = () => {
 							className="form-control"
 							placeholder="Full Name"
 							name="full_name"
-							value={AddingContact.full_name}
+							value={contactEditing.full_name}
 							onChange={handleInputChange}
 						/>
 					</div>
@@ -63,7 +81,7 @@ export const AddContact = () => {
 							className="form-control"
 							placeholder="Enter email"
 							name="email"
-							value={AddingContact.email}
+							value={contactEditing.email}
 							onChange={handleInputChange}
 						/>
 					</div>
@@ -74,7 +92,7 @@ export const AddContact = () => {
 							className="form-control"
 							placeholder="Enter phone"
 							name="phone"
-							value={AddingContact.phone}
+							value={contactEditing.phone}
 							onChange={handleInputChange}
 						/>
 					</div>
@@ -85,7 +103,7 @@ export const AddContact = () => {
 							className="form-control"
 							placeholder="Enter address"
 							name="address"
-							value={AddingContact.address}
+							value={contactEditing.address}
 							onChange={handleInputChange}
 						/>
 					</div>
@@ -99,4 +117,8 @@ export const AddContact = () => {
 			</div>
 		</div>
 	);
+};
+
+Editcontact.propTypes = {
+	match: PropTypes.object
 };
