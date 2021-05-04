@@ -2,19 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export const AddContact = () => {
-	const [AddingContact, setAddingContact] = useState({
+	const [addingContact, setAddingContact] = useState({
 		full_name: " ",
 		email: " ",
-		agenda_slug: "LC_agenda",
+		agenda_slug: "luisrcc",
 		address: " ",
 		phone: " "
 	});
 
-	const { full_name, email, agenda_slug, address, phone } = AddingContact;
+	const { full_name, email, agenda_slug, address, phone } = addingContact;
 
 	const handleInputChange = ({ target }) => {
 		setAddingContact({
-			...AddingContact,
+			...addingContact,
 			[target.name]: target.value
 		});
 	};
@@ -27,14 +27,14 @@ export const AddContact = () => {
 			headers: {
 				"Content-Type": "application/json"
 			},
-			body: JSON.stringify(AddingContact)
+			body: JSON.stringify(addingContact)
 		};
 		const response = await fetch("https://assets.breatheco.de/apis/fake/contact/", params);
 		const data = await response.json();
 		setAddingContact({
 			full_name: " ",
 			email: " ",
-			agenda_slug: "LC_Agenda",
+			agenda_slug: "luisrcc",
 			address: " ",
 			phone: " "
 		});
@@ -52,7 +52,7 @@ export const AddContact = () => {
 							className="form-control"
 							placeholder="Full Name"
 							name="full_name"
-							value={AddingContact.full_name}
+							value={addingContact.full_name}
 							onChange={handleInputChange}
 						/>
 					</div>
@@ -63,7 +63,7 @@ export const AddContact = () => {
 							className="form-control"
 							placeholder="Enter email"
 							name="email"
-							value={AddingContact.email}
+							value={addingContact.email}
 							onChange={handleInputChange}
 						/>
 					</div>
@@ -74,7 +74,7 @@ export const AddContact = () => {
 							className="form-control"
 							placeholder="Enter phone"
 							name="phone"
-							value={AddingContact.phone}
+							value={addingContact.phone}
 							onChange={handleInputChange}
 						/>
 					</div>
@@ -85,7 +85,7 @@ export const AddContact = () => {
 							className="form-control"
 							placeholder="Enter address"
 							name="address"
-							value={AddingContact.address}
+							value={addingContact.address}
 							onChange={handleInputChange}
 						/>
 					</div>
